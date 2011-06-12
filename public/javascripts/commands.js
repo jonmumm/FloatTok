@@ -1,35 +1,37 @@
-var Commands = {};
+var commands = function() {
+  	
+	var Commands;
+  
+  function validate(command) {
+  	// Check that the message is a command
+  	if (!command.hasOwnProperty("type") || !command.hasOwnProperty("action") || !command.hasOwnProperty("params")) {	
+  		return false;
+  	}
 
-function validate(command) {
-	console.log(command);
-	
-	// Check that the message is a command
-	if (!command.hasOwnProperty("type") || !command.hasOwnProperty("action") || !command.hasOwnProperty("params")) {	
-	  console.log("!!!!!!!!! INVALID COMMAND !!!!!!!!!!");
-		return false;
-	}
-	
-	// Check that the command has a valid type and action
-	if (!Commands.hasOwnProperty(command.type) || !Commands[command.type].hasOwnProperty(command.action)) {
-	  console.log("!!!!!!!!! INVALID COMMAND !!!!!!!!!!");
-		return false;
-	}
-	
-	return true;	
-}
+  	// Check that the command has a valid type and action
+  	if (!this.Commands.hasOwnProperty(command.type) || !this.Commands[command.type].hasOwnProperty(command.action)) {
+  		return false;
+  	}
 
-function run(command, client) {
-	if (client) {
-		Commands[command.type][command.action](command.params, client);
-	} else {
-		Commands[command.type][command.action](command.params);
-	}	
-}
+  	return true;	
+  }
 
-function inject(type, functions) {
-	Commands[type] = functions;
-}
+  function run(command, client) {
+  	if (client) {
+  		this.Commands[command.type][command.action](command.params, client);
+  	} else {
+  		this.Commands[command.type][command.action](command.params);
+  	}	
+  }
 
-exports.validate = validate;
-exports.run = run;
-exports.inject = inject;
+  function inject(type, functions) {
+    if (!this.Commands) this.Commands = {};
+  	this.Commands[type] = functions;
+  }
+  
+  return {
+    validate: validate,
+    run: run,
+    inject: inject
+  }
+}();

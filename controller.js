@@ -1,4 +1,4 @@
-var commands = require('./public/javascripts/commands');
+var commands = require('./commands');
 
 exports.connect = connect;
 exports.disconnect = disconnect;
